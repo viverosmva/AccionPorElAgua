@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cursos Disponibles</title>
+    <style>
+        /* Estilos base existentes */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            animation: gradientBG 15s ease infinite;
+            background-size: 400% 400%;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50% }
+            50% { background-position: 100% 50% }
+            100% { background-position: 0% 50% }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #0066cc;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .nav-links a:hover::before {
+            left: 100%;
+        }
+
+        .nav-links a:hover {
+            background: #0066cc;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+
+        .courses-section h2 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: slideDown 1s ease-out forwards 0.5s;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .course-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: calc(var(--card-index) * 0.2s);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .course-image-container {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .course-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .course-card:hover .course-image {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .course-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #0066cc;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: linear-gradient(45deg, #0066cc, #0099ff);
+            color: white;
+            border: none;
+        }
+
+        .primary-button:hover {
+            background: linear-gradient(45deg, #0099ff, #0066cc);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 102, 204, 0.4);
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        #confirmation-message {
+            display: none;
+            padding: 20px;
+            text-align: center;
+            background-color: #e0f7fa;
+            color: #00796b;
+            margin-top: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <nav class="nav-links">
+                <a href="index.html">🏠 Inicio</a>
+                <a href="registro.html">📝 Registrarse</a>
+                <a href="login.html">🔑 Iniciar Sesión</a>
+                <a href="cursos.html">📚 Cursos</a>
+                <a href="perfil_usuario.html">👤 Perfil</a>
+            </nav>
+        </header>
+
+        <section class="courses-section">
+            <h2>✨ Cursos Disponibles</h2>
+            <div class="course-grid">
+                <div class="course-card" style="--card-index: 1">
+                    <span class="course-badge">¡Popular!</span>
+                    <div class="course-image-container">
+                        <img src="https://images.pexels.com/photos/1761279/pexels-photo-1761279.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                             alt="Gestión y Conservación del Recurso Hídrico" 
+                             class="course-image">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Gestión y Conservación del Recurso Hídrico</h3>
+                        <p class="course-duration">4 a 6 semanas (1-2 horas cada semana)</p>
+                        <p class="course-description">
+                            Objetivo del curso: Brindar conocimientos y herramientas sobre la importancia del agua, los 
+                            desafíos actuales, y las estrategias y acciones necesarias para la conservación y gestión 
+                            sostenible de los recursos hídricos.
+                        </p>
+                        <div class="button-group">
+                            <a href="registro_curso.html" class="button primary-button">
+                                📝 Inscribirse al curso
+                            </a>
+                            
+                            <a href="index.html" class="button secondary-button">
+                                🏠 Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card" style="--card-index: 2">
+                    <span class="course-badge">¡Nuevo!</span>
+                    <div class="course-image-container">
+                        <img src="https://images.pexels.com/photos/1108572/pexels-photo-1108572.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                             alt="Tecnologías para el Tratamiento de Agua" 
+                             class="course-image">
+                    </div>
+                    <div class="course-content">
+                        <h3 class="course-title">Tecnologías para el Tratamiento de Agua</h3>
+                        <p class="course-duration">8 semanas (2 horas cada semana)</p>
+                        <p class="course-description">
+                            Aprende sobre las últimas tecnologías y métodos para el tratamiento y purificación del agua. 
+                            Desde sistemas básicos hasta soluciones avanzadas para diferentes contextos y necesidades.
+                        </p>
+                        <div class="button-group">
+                            <a href="registro_curso.html" class="button primary-button">
+                                📝 Inscribirse al curso
+                            </a>
+                            
+                            <a href="index.html" class="button secondary-button">
+                                🏠 Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div id="confirmation-message"></div>
+    </div>
+
+    <script>
+        function inscribirCurso(nombreCurso) {
+            const message = `¡Te has inscrito exitosamente en el curso: "${nombreCurso}"!`;
+            const confirmationDiv = document.getElementById('confirmation-message');
+            confirmationDiv.innerText = message;
+            confirmationDiv.style.display = 'block';
+            confirmationDiv.style.animation = 'fadeIn 1s ease-out forwards';
+
+            // Opcional: Ocultar el mensaje después de unos segundos
+            setTimeout(() => {
+                confirmationDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
